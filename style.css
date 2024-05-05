@@ -8,8 +8,9 @@ body {
   
   .board {
     display: flex;
-    padding: 10%;
+    /* padding: 50%; */
     flex-wrap: wrap;
+    /* justify-content: center; */
     width: 300px;
     /* border: 3px solid chocolate; */
   }
@@ -32,8 +33,9 @@ h1,h2 {
 }
 
 #reset {
-    background-color: beige;
+    background-color: rgb(104, 207, 218);
     border-radius: 10px;
+    margin: 10px;
 }
 
 header {
@@ -43,6 +45,10 @@ header {
     align-items: center;
 }
 
+main {
+    display: flex;
+    justify-content: center;
+}
 footer {
     display: flex;
     justify-content: center;

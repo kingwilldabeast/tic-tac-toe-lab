@@ -56,7 +56,7 @@ function init() {
     page.style.backgroundColor = 'gainsboro';
     header.style.color = 'black';
     messageEl.style.color = 'black';
-    squareEls.forEach((square) => square.style.backgroundColor = 'gainsboro')
+    squareEls.forEach((square) => square.style.backgroundColor = '#aaa')
     board = ['', '', '','','','','','','']
     // board = ['X', 'X', 'X','X','O','','','','X'] //winning
     // board = ['X', 'O', 'X','X','O','X','O','X','O'] //tie
