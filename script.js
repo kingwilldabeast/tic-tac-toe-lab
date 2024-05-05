@@ -17,12 +17,12 @@
 /*-------------------------------- Constants --------------------------------*/
 
 const winningCombos = [
-    [0,1,2],
+    [0,1,2], //first row
     [3,4,5],
     [6,7,8],
-    [0,3,6],
+    [0,3,6], //first columm
     [1,4,7],
-    [2,5,8],
+    [2,5,8], //
     [0,4,8],
     [2,4,6]
 ]
@@ -37,44 +37,39 @@ let tie
 
 /*------------------------ Cached Element References ------------------------*/
 
-const squareEls = document.querySelectorAll('.sqr')
-
-const messageEl = document.getElementById(`message`)
-
-const resetBtnEl = document.getElementById('reset')
-
 const page = document.querySelector('body')
 
 const header = document.querySelector('h1')
 
+const messageEl = document.getElementById(`message`)
+
 const table = document.querySelector('#board')
+
+const squareEls = document.querySelectorAll('.sqr')
+
+const resetBtnEl = document.getElementById('reset')
 
 /*-------------------------------- Functions --------------------------------*/
 
 
 function init() {
-board = ['', '', '','','','','','','']
-// board = ['X', 'X', 'X','X','O','','','','X'] //winning
-// board = ['X', 'O', 'X','X','O','X','O','X','O'] //tie
-// players = ['😇','👺']
-players = [{name: 'Alice',symbol:'😇', color: '#ee44dd'},{name: 'Barney', symbol:'👺', color: '#2299aa'}]
-// players = ['X','O']
-turn = players[0] //could also be 'O'
-// winner = true
-winner = false
-// tie = true
-tie = false
-page.style.backgroundColor = 'gainsboro';
-messageEl.style.color = 'black';
-header.style.color = 'black';
-// console.log(board)
-// console.log(squareEls)
-// console.log(messageEl)
-// console.log(turn)
-// console.log(winner)
-// console.log(tie)
-render()
-console.log("asdfasdfsadfasdf")
+    page.style.backgroundColor = 'gainsboro';
+    header.style.color = 'black';
+    messageEl.style.color = 'black';
+    squareEls.forEach((square) => square.style.backgroundColor = 'gainsboro')
+    board = ['', '', '','','','','','','']
+    // board = ['X', 'X', 'X','X','O','','','','X'] //winning
+    // board = ['X', 'O', 'X','X','O','X','O','X','O'] //tie
+
+    //players are objects
+    players = [{name: 'Alice',symbol:'😇', color: '#ee44dd'},{name: 'Barney', symbol:'👺', color: '#2299aa'}]
+
+    turn = players[0] //set starting player
+    // winner = true
+    winner = false
+    // tie = true
+    tie = false
+    render()
 }
 
 function render() {
@@ -83,18 +78,18 @@ function render() {
 }
 
 //sets board display to match board array 
-function updateBoard() {
-    for (let i = 0; i < 9; i++) {
-        document.getElementById(i).innerText = board [i];
-        //console.log(document.getElementById(i).innerText)
-    }
-}
-// function updateBoard2() {
-//         squareEls.forEach((i) => {
-//             index = parseInt(i.getAttribute('id'))
-//             i.innerText = board[index]
-//         })
+// function updateBoard() {
+//     for (let i = 0; i < 9; i++) {
+//         document.getElementById(i).innerText = board [i];
+//         //console.log(document.getElementById(i).innerText)
 //     }
+// }
+function updateBoard() {
+        squareEls.forEach((i) => {
+            let index = parseInt(i.getAttribute('id'))
+            i.innerText = board[index]
+        })
+    }
 
 
 
@@ -107,7 +102,6 @@ function updateMessage() {
         page.style.backgroundColor = '#DFE42D';
         messageEl.style.color = '#8C6D13';
         header.style.color = '#8C6D13';
-        // table.style.border.color = '#8C6D13';
     }   else  {
         messageEl.innerText = `Player ${turn.name} is the winner!`
         page.style.backgroundColor = '#6ADB6A';
@@ -119,12 +113,12 @@ function updateMessage() {
 //many things happen when click square
 function handleClick(square) {
     if (winner == true) {return}
-    
-    //place piece 
+     
+    //change color 
     if (square.innerText != "") {
         return
     } else {
-    square.innerText = turn.symbol //place piece 
+        square.style.backgroundColor = turn.color;
     }
 
     //update array
@@ -133,20 +127,15 @@ function handleClick(square) {
 
     checkForWinner()
     checkForTie()
-    updateMessage()
-    if (winner == true) {return}
-
-    //change player
     switchPlayerTurn()
-
-    updateMessage()
+    render()
 }
 
 function checkForWinner() {
     winningCombos.forEach((combo) => {
         // console.log(`combos are ${combo[0]} ${combo[1]} ${combo[2]}`)
-        let a = board[combo[0]]
-        if (board[combo[0]] != "" && board[combo[0]] == board[combo[1]] && board[combo[1]] == board[combo[2]]) {
+        let [a,b,c] = combo
+        if (board[a] != "" && board[a] == board[b] && board[b] == board[c]) {
             winner = true
         }
     })
@@ -168,6 +157,7 @@ function checkForWinner() {
 
 // }
 function checkForTie() { 
+        if (winner) {return}
         const isFull = (currentValue) => currentValue != '';
         if (board.every(isFull)) {tie = true}
 }
@@ -175,6 +165,7 @@ function checkForTie() {
 
     //change player
     function switchPlayerTurn() {
+        if (winner) {return}
         turn == players[0] ? turn = players[1] : turn = players[0]
 
     }
@@ -182,12 +173,8 @@ function checkForTie() {
 
 /*----------------------------- Event Listeners -----------------------------*/
 
-// document.querySelector('body').onload = function(){init()};
-
 document.querySelector('body').addEventListener("load", init());
-
-
-resetBtnEl.addEventListener("click", init);
+// document.querySelector('body').onload = function(){init()};
 
 
 // Add a click event listener to each square
@@ -200,12 +187,14 @@ squareEls.forEach(function(square) {
 
 //alternate click function
 // function handleButtonClick(event) {
-//     const squareIndex = event.target.id;
-//     console.log('Clicked button ID:', clickedButtonId);
-// }
-
-
+    //     const squareIndex = event.target.id;
+    //     console.log('Clicked button ID:', clickedButtonId);
+    // }
+    
+resetBtnEl.addEventListener("click", init);
+    
+    
 
 
 // collab with Tanner Gilliam
-// assisted Megan, Kass, Alfred
+// assisted Megan, Kass, Alfred, Azalea and in some cases took inspiration from their code 
